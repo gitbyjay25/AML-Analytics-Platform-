@@ -1,12 +1,5 @@
 USE aml_analytics;
 
-INSERT INTO peer_group (group_name, segment_criteria) VALUES
-  ('Retail APAC Current Accounts', 'customer_type=retail, region=APAC, product=current_account'),
-  ('Corporate EU Trade Finance', 'customer_type=corporate, region=EU, product=trade_finance');
-  
-  
-
-
 DROP PROCEDURE IF EXISTS sp_peer_group_assign;
 
 DELIMITER $$
