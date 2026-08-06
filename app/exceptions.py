@@ -27,6 +27,9 @@ class BusinessRuleError(AppError):
     """
     pass
 
+class AuthError(AppError):
+    """Missing, invalid, or expired authentication token. Maps to HTTP 401."""
+    pass
 
 class DatabaseError(AppError):
     """Unexpected database failure. Maps to HTTP 500 — message is logged,
