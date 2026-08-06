@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}My Cases{% endblock %}
+{% block content %}
+<h1>My Cases</h1>
+<table>
+    <tr><th>Case ID</th><th>Transaction</th><th>Status</th><th>Notes</th><th>Created</th><th></th></tr>
+    {% for c in cases %}
+    <tr class="status-{{ c.status }}">
+        <td>{{ c.case_id }}</td>
+        <td>{{ c.transaction_id }}</td>
+        <td>{{ c.status }}</td>
+        <td>{{ c.notes or "—" }}</td>
+        <td>{{ c.created_at.strftime("%Y-%m-%d") }}</td>
+        <td><a href="/app/transactions/{{ c.transaction_id }}">Open →</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6">No cases yet. Open a transaction and create one.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

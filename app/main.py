@@ -3,8 +3,8 @@ from fastapi.responses import JSONResponse
 
 from app.core.config import settings
 from app.core.db import init_pool
-from app.exceptions import AppError, BusinessRuleError, DatabaseError, NotFoundError
-from app.routers import auth, cases, reports, risk_scores, transactions
+from app.exceptions import AppError, BusinessRuleError, DatabaseError, NotFoundError 
+from app.routers import auth, cases, reports, risk_scores, transactions , web
 
 app = FastAPI(title=settings.app_name)
 
@@ -52,7 +52,7 @@ app.include_router(transactions.router)
 app.include_router(risk_scores.router)
 app.include_router(cases.router)
 app.include_router(reports.router)
-
+app.include_router(web.router)
 
 @app.get("/health")
 def health():

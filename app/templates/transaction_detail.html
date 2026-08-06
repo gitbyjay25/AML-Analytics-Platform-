@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Transaction {{ txn.transaction_id }}{% endblock %}
+{% block content %}
+<p><a href="/app/transactions">← Back to Transaction Explorer</a></p>
+<h1>Transaction #{{ txn.transaction_id }}</h1>
+
+{% if flash %}<div class="flash">{{ flash }}</div>{% endif %}
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+<div class="card">
+    <h2 style="margin-top:0;">Transaction Details</h2>
+    <table>
+        <tr><td><strong>Sender</strong></td><td>{{ txn.sender_account }}</td>
+            <td><strong>Receiver</strong></td><td>{{ txn.receiver_account }}</td></tr>
+        <tr><td><strong>Amount</strong></td><td>{{ "%.2f"|format(txn.amount) }} {{ txn.currency }}</td>
+            <td><strong>Country</strong></td><td>{{ txn.country }}</td></tr>
+        <tr><td><strong>Payment Type</strong></td><td>{{ txn.payment_type }}</td>
+            <td><strong>Date</strong></td><td>{{ txn.txn_timestamp }}</td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <h2 style="margin-top:0;">Risk & Behavioral Signal</h2>
+    {% if risk_score %}
+    <table>
+        <tr><td><strong>Combined Score</strong></td>
+            <td class="risk-{{ risk_score.risk_label }}">{{ risk_score.combined_score }} ({{ risk_score.risk_label }})</td></tr>
+        <tr><td><strong>Rule Flag</strong></td><td>{{ risk_score.rule_flag_score }}</td></tr>
+        <tr><td><strong>Baseline Deviation</strong></td><td>{{ risk_score.baseline_deviation_score }}</td></tr>
+        <tr><td><strong>Peer Anomaly</strong></td><td>{{ risk_score.peer_anomaly_score }}</td></tr>
+    </table>
+    {% else %}
+    <p>No risk score calculated yet for this transaction.</p>
+    <form method="post" action="/app/transactions/{{ txn.transaction_id }}/calculate">
+        <button type="submit">Calculate Risk Score</button>
+    </form>
+    {% endif %}
+
+    {% if baseline %}
+    <p style="margin-top:14px;"><strong>Account baseline:</strong>
+        avg {{ "%.2f"|format(baseline.avg_amount) }}, stddev {{ "%.2f"|format(baseline.stddev_amount) if baseline.stddev_amount else "n/a" }},
+        z-score for this transaction: <strong>{{ baseline.z_score if baseline.z_score is not none else "n/a" }}</strong></p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2 style="margin-top:0;">Case</h2>
+    {% if case %}
+    <table>
+        <tr><td><strong>Case ID</strong></td><td>{{ case.case_id }}</td></tr>
+        <tr><td><strong>Status</strong></td><td>{{ case.status }}</td></tr>
+        <tr><td><strong>Notes</strong></td><td>{{ case.notes or "—" }}</td></tr>
+        <tr><td><strong>Analyst</strong></td><td>{{ case.analyst_id }}</td></tr>
+    </table>
+    {% if case.status != "cleared" %}
+    <form method="post" action="/app/cases/{{ case.case_id }}/status">
+        <label>Update Status</label>
+        <select name="status">
+            <option value="reviewed" {% if case.status == "reviewed" %}selected{% endif %}>Reviewed</option>
+            <option value="escalated" {% if case.status == "escalated" %}selected{% endif %}>Escalated</option>
+            <option value="cleared">Cleared</option>
+        </select>
+        <label>Notes</label>
+        <textarea name="notes" rows="3">{{ case.notes or "" }}</textarea>
+        <button type="submit">Update Case</button>
+    </form>
+    {% else %}
+    <p><em>This case is cleared (terminal state). Open a new case if further review is needed.</em></p>
+    {% endif %}
+    {% else %}
+    <p>No case exists yet for this transaction.</p>
+    <form method="post" action="/app/cases">
+        <input type="hidden" name="transaction_id" value="{{ txn.transaction_id }}">
+        <label>Status</label>
+        <select name="status">
+            <option value="reviewed">Reviewed</option>
+            <option value="escalated">Escalated</option>
+        </select>
+        <label>Notes</label>
+        <textarea name="notes" rows="3" placeholder="Investigation notes..."></textarea>
+        <button type="submit">Create Case</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

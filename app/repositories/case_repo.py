@@ -30,3 +30,17 @@ def get_queue(analyst_id: int | None = None) -> list[dict]:
 def get_by_id(case_id: int) -> dict | None:
     rows = run_query("SELECT * FROM case_notes WHERE case_id = %s", (case_id,))
     return rows[0] if rows else None
+
+
+def get_by_transaction_id(transaction_id: int) -> dict | None:
+    rows = run_query(
+        """
+        SELECT *
+        FROM case_notes
+        WHERE transaction_id = %s
+        ORDER BY created_at DESC
+        LIMIT 1
+        """,
+        (transaction_id,),
+    )
+    return rows[0] if rows else None

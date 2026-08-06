@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}AML Analytics{% endblock %} — Investigation Workspace</title>
+    <style>
+        :root { --navy: #1F3864; --accent: #2E74B5; --red: #C00000; --amber: #E8A33D; --grey: #595959; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #FAFAFA; color: #262626; }
+        nav { background: var(--navy); color: white; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; }
+        nav a { color: white; text-decoration: none; margin-right: 20px; font-size: 14px; }
+        nav a:hover { text-decoration: underline; }
+        .brand { font-weight: bold; font-size: 16px; }
+        main { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+        h1 { color: var(--navy); font-size: 22px; }
+        h2 { color: var(--accent); font-size: 17px; margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; }
+        th { background: var(--navy); color: white; text-align: left; padding: 8px 10px; font-size: 13px; }
+        td { padding: 8px 10px; border-bottom: 1px solid #eee; font-size: 13px; }
+        tr:hover { background: #F2F6FB; }
+        .card { background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 18px; margin-bottom: 16px; }
+        label { display: block; margin: 10px 0 4px; font-size: 13px; font-weight: bold; color: var(--grey); }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+        button { background: var(--accent); color: white; border: none; padding: 9px 18px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 12px; }
+        button:hover { background: var(--navy); }
+        .risk-high { color: var(--red); font-weight: bold; }
+        .risk-medium { color: var(--amber); font-weight: bold; }
+        .risk-low { color: var(--grey); }
+        .status-escalated { background: #FDF1E0; }
+        .status-cleared { background: #F0F0F0; }
+        .error { background: #FDECEC; border-left: 4px solid var(--red); padding: 10px 14px; margin-bottom: 16px; font-size: 14px; }
+        .flash { background: #EAF2E3; border-left: 4px solid #4E8B31; padding: 10px 14px; margin-bottom: 16px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="brand">AML Analytics — Investigation Workspace</div>
+        <div>
+            {% if user %}
+                <a href="/app/transactions">Transactions</a>
+                <a href="/app/cases">My Cases</a>
+                <span style="margin-right: 16px;">{{ user.full_name }} ({{ user.role }})</span>
+                <a href="/app/logout">Log out</a>
+            {% endif %}
+        </div>
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -17,3 +17,6 @@ def update_case_status(case_id: int, new_status: str, notes: str | None) -> dict
 
 def get_queue(analyst_id: int | None = None) -> list[dict]:
     return case_repo.get_queue(analyst_id)
+
+def get_case_for_transaction(transaction_id: int) -> dict | None:
+    return case_repo.get_by_transaction_id(transaction_id)

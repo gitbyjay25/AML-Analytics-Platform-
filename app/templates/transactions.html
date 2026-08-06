@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Transaction Explorer{% endblock %}
+{% block content %}
+<h1>Transaction Explorer</h1>
+
+<div class="card">
+    <form method="get" action="/app/transactions">
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 140px;">
+                <label>Sender Account</label>
+                <input type="text" name="sender_account" value="{{ filters.sender_account or '' }}">
+            </div>
+            <div style="flex: 1; min-width: 140px;">
+                <label>Country</label>
+                <input type="text" name="country" value="{{ filters.country or '' }}">
+            </div>
+            <div style="flex: 1; min-width: 140px;">
+                <label>Payment Type</label>
+                <input type="text" name="payment_type" value="{{ filters.payment_type or '' }}">
+            </div>
+            <div style="flex: 1; min-width: 120px;">
+                <label>Min Amount</label>
+                <input type="number" step="0.01" name="min_amount" value="{{ filters.min_amount or '' }}">
+            </div>
+        </div>
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<table>
+    <tr>
+        <th>ID</th><th>Sender</th><th>Receiver</th><th>Amount</th><th>Currency</th>
+        <th>Country</th><th>Payment Type</th><th>Date</th><th></th>
+    </tr>
+    {% for txn in transactions %}
+    <tr>
+        <td>{{ txn.transaction_id }}</td>
+        <td>{{ txn.sender_account }}</td>
+        <td>{{ txn.receiver_account }}</td>
+        <td>{{ "%.2f"|format(txn.amount) }}</td>
+        <td>{{ txn.currency }}</td>
+        <td>{{ txn.country }}</td>
+        <td>{{ txn.payment_type }}</td>
+        <td>{{ txn.txn_timestamp.strftime("%Y-%m-%d") }}</td>
+        <td><a href="/app/transactions/{{ txn.transaction_id }}">View →</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="9">No transactions match these filters.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}
