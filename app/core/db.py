@@ -31,8 +31,10 @@ def init_pool() -> None:
             autocommit=False,
         )
     except Exception as exc:
-        _pool = None
-        raise DatabaseError("Database connection failed") from exc
+        import traceback
+
+        traceback.print_exc()
+        raise
 
 
 @contextmanager
