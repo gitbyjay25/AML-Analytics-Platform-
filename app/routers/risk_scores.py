@@ -1,5 +1,5 @@
-from fastapi import APIRouter
-
+from fastapi import APIRouter , Depends
+from app.dependencies import require_analyst_or_manager
 from app.schemas.risk_score import RiskScoreCalculateResult, RiskScoreOut
 from app.services import risk_score_service
 
@@ -12,5 +12,9 @@ def get_latest_score(transaction_id: int):
 
 
 @router.post("/{transaction_id}/calculate", response_model=RiskScoreCalculateResult)
-def calculate_score(transaction_id: int, model_id: int | None = None):
+def calculate_score(
+    transaction_id: int,
+    model_id: int | None = None,
+    current_user: dict = Depends(require_analyst_or_manager),
+):
     return risk_score_service.calculate_and_persist(transaction_id, model_id)

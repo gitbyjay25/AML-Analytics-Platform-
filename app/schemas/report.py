@@ -11,7 +11,6 @@ class ReportGenerateRequest(BaseModel):
     report_type: ReportType
     period_start: date
     period_end: date
-    generated_by: int
     file_path: str | None = None
 
 

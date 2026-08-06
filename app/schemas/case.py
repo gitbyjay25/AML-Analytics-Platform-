@@ -8,7 +8,6 @@ CaseStatus = Literal["reviewed", "escalated", "cleared"]
 
 class CaseCreate(BaseModel):
     transaction_id: int
-    analyst_id: int
     status: CaseStatus = "reviewed"
     notes: str | None = None
 

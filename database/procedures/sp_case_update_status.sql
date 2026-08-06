@@ -1,17 +1,16 @@
 USE aml_analytics;
 
-DROP PROCEDURE IF EXISTS sp_case_create;
+DROP PROCEDURE IF EXISTS sp_case_update_status;
 
 DELIMITER $$
 
-CREATE PROCEDURE sp_case_create (
-    IN p_transaction_id BIGINT UNSIGNED,
-    IN p_analyst_id INT UNSIGNED,
-    IN p_status VARCHAR(20),
+CREATE PROCEDURE sp_case_update_status (
+    IN p_case_id INT UNSIGNED,
+    IN p_new_status VARCHAR(20),
     IN p_notes TEXT
 )
 sp_body: BEGIN
-    DECLARE v_role VARCHAR(20);
+    DECLARE v_current_status VARCHAR(20);
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -19,33 +18,37 @@ sp_body: BEGIN
         RESIGNAL;
     END;
 
-    IF NOT EXISTS (SELECT 1 FROM transactions WHERE transaction_id = p_transaction_id) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'sp_case_create: transaction_id does not exist';
+    SELECT status
+    INTO v_current_status
+    FROM case_notes
+    WHERE case_id = p_case_id;
+
+    IF v_current_status IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'sp_case_update_status: case_id does not exist';
     END IF;
 
-    SELECT role INTO v_role FROM users WHERE user_id = p_analyst_id;
-    IF v_role IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'sp_case_create: analyst_id does not exist';
-    END IF;
-    IF v_role NOT IN ('analyst', 'manager') THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'sp_case_create: only analyst or manager roles may create cases';
+    IF p_new_status NOT IN ('reviewed', 'escalated', 'cleared') THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'sp_case_update_status: invalid status value';
     END IF;
 
-    IF EXISTS (
-        SELECT 1 FROM case_notes
-        WHERE transaction_id = p_transaction_id AND status <> 'cleared'
-    ) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'sp_case_create: an active case already exists for this transaction';
+    IF v_current_status = 'cleared' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'sp_case_update_status: case is cleared (terminal state) - open a new case instead';
     END IF;
 
     START TRANSACTION;
 
-    INSERT INTO case_notes (transaction_id, analyst_id, status, notes)
-    VALUES (p_transaction_id, p_analyst_id, IFNULL(p_status, 'reviewed'), p_notes);
+    UPDATE case_notes
+    SET
+        status = p_new_status,
+        notes = IFNULL(p_notes, notes),
+        updated_at = NOW()
+    WHERE case_id = p_case_id;
 
     COMMIT;
 
-    SELECT LAST_INSERT_ID() AS case_id;
 END sp_body$$
 
 DELIMITER ;
