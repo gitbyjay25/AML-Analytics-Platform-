@@ -257,25 +257,25 @@ uvicorn app.main:app --reload
 
 ### Login
 
-> ![Login](https://raw.githubusercontent.com/gitbyjay25/AML-Analytics-Platform-/main/image-3.png)
+> ![Login](<dashboards/aml-web-img/Login Page.png>)
 
 ---
 
 ### Transaction Explorer
 
-> ![Tranaction_page](https://raw.githubusercontent.com/gitbyjay25/AML-Analytics-Platform-/main/image.png)
+> ![Tranaction_page](dashboards/aml-web-img/Transaction_explorer.png)
 
 ---
 
 ### Transaction Details
 
-> ![Transaction_Details](https://raw.githubusercontent.com/gitbyjay25/AML-Analytics-Platform-/main/image-1.png)
+> ![Transaction_Details](dashboards/aml-web-img/Transaction_case.png)
 
 ---
 
 ### Case Queue
 
-> ![Case_Queue](https://raw.githubusercontent.com/gitbyjay25/AML-Analytics-Platform-/main/image-2.png)
+>![Case_Queue](<dashboards/aml-web-img/My cases.png>)
 ## Power BI Dashboards
 
 ### Dashboard 1
