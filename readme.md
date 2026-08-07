@@ -1,4 +1,4 @@
-# AML Analytics Platform
+# AML Analytics Platform 
 
 > An end-to-end **Anti-Money Laundering (AML)** analytics platform built using **FastAPI, MySQL, Power BI, and Railway** that combines behavioral transaction analytics, explainable risk scoring, case management, and interactive dashboards.
 
@@ -27,13 +27,9 @@
 
 Traditional AML systems rely heavily on fixed rules (for example, *transactions above a fixed threshold are suspicious*).
 
-This platform takes a **behavioral analytics approach** by comparing transactions against:
+AML Analytics Platform is an analyst-focused transaction monitoring and investigation system designed to support Anti-Money Laundering (AML) workflows. It helps compliance analysts identify suspicious transactions using behavioral analytics, calculate explainable risk scores, investigate alerts, manage cases, and visualize trends through interactive Power BI dashboards.
 
-- the account's own historical behavior
-- similar peer groups
-- explainable risk indicators
-
-instead of relying only on global thresholds.
+Unlike traditional rule-based monitoring systems, this platform evaluates transactions against an account's historical behavior and peer group patterns, providing analysts with explainable insights rather than relying solely on fixed transaction thresholds.
 
 The platform provides investigators with both:
 
@@ -44,67 +40,79 @@ along with interactive Power BI dashboards.
 
 ---
 
-# ✨ Features
+# ✨ Key Features
 
-## 🔍 Transaction Monitoring
+## 👨‍💼 Analyst Investigation Workspace
 
-- Search & filter transactions
-- Transaction detail view
-- Behavioral analysis
+- Secure analyst login
+- Transaction investigation portal
+- Analyst-specific case queue
+- Case creation, annotation, and status updates
+- Cookie-based authentication for the web workspace
 
 ---
 
-## Behavioral Analytics
+## 🔍 Transaction Monitoring
 
-- Rolling account baseline
+- Search and filter transactions using multiple criteria
+- Drill down into transaction details
+- Review transaction history alongside behavioral insights
+- Monitor suspicious activity from a single investigation interface
+
+---
+
+## 📈 Behavioral Analytics
+
+- Rolling account baseline analysis
 - Baseline deviation detection
 - Peer-group anomaly detection
+- Behavioral profiling using historical transaction patterns
 
 ---
 
 ## ⚠️ Explainable Risk Scoring
 
-Risk score combines multiple explainable components:
+Risk scores are generated using transparent and auditable rules by combining:
 
-- Rule-based checks
+- Rule-based indicators
 - Baseline deviation
-- Peer anomaly
+- Peer-group anomaly
 
-instead of using a black-box ML model.
+Designed as a **decision-support tool** for analysts rather than a black-box prediction model.
 
 ---
 
 ## 📂 Case Management
 
 - Create investigation cases
-- Update case status
-- Analyst notes
+- Update investigation status
+- Record analyst notes
 - Prevent duplicate active cases
-- Terminal "Cleared" state enforcement
+- Enforce terminal **Cleared** case state through database business rules
 
 ---
 
-## 🔐 Authentication
+## 🔐 Authentication & Security
 
-- JWT Authentication (API)
-- Cookie Authentication (Web Portal)
-- Role-based authorization
-- Protected write endpoints
+- JWT authentication for REST APIs
+- Cookie-based authentication for the Investigation Workspace
+- Role-based authorization (Analyst / Manager)
+- Protected write operations
+- Passwords secured using bcrypt
 
 ---
 
-## 📊 Power BI Dashboards
+## 📊 Business Intelligence
 
-Three dashboards included:
+Interactive Power BI dashboards for:
 
 - Transaction Monitoring & Risk Overview
 - Behavioral & Peer Analytics
 - Case Management & Investigation
 
-Power BI connects **directly to MySQL through ODBC**, independent of the FastAPI backend.
+Power BI connects **directly to MySQL via ODBC**, independently of the FastAPI backend, enabling reporting without introducing API overhead.
 
----
-
+```
 # 🏗️ Architecture
 
 <p align="center">
@@ -249,7 +257,7 @@ uvicorn app.main:app --reload
 
 ### Login
 
-> ![Login](image-3.png)
+> ![Login](https://github.com/gitbyjay25/AML-Analytics-Platform-/blob/main/image-3.png)
 
 ---
 
@@ -261,13 +269,13 @@ uvicorn app.main:app --reload
 
 ### Transaction Details
 
-> ![Transaction_Details](image-1.png)
+> ![Transaction_Details](https://github.com/gitbyjay25/AML-Analytics-Platform-/blob/main/image-1.png)
 
 ---
 
 ### Case Queue
 
-> ![Case_Queue](image-2.png)
+> ![Case_Queue](https://github.com/gitbyjay25/AML-Analytics-Platform-/blob/main/image-2.png)
 
 ---
 
@@ -324,10 +332,21 @@ The application includes:
 - Advanced anomaly detection models
 
 ---
+## 👥 Target Users
 
+This platform is designed for:
+
+- AML Analysts
+- Financial Crime Investigation Teams
+- Compliance Officers
+- AML Managers
+
+It is intended as an internal investigation and decision-support platform rather than a customer-facing banking application.
+
+```
 # 👨‍💻 Author
 
-**Jay**
+**[gitbyjay25](https://github.com/gitbyjay25)**
 
 Built as a portfolio project demonstrating backend engineering, database design, behavioral analytics, and dashboard development.
 
