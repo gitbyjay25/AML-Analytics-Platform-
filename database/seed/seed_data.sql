@@ -45,3 +45,28 @@ SELECT * FROM account_baseline ORDER BY account_id;
 INSERT INTO peer_group (group_name, segment_criteria) VALUES
   ('Retail APAC Current Accounts', 'customer_type=retail, region=APAC, product=current_account'),
   ('Corporate EU Trade Finance', 'customer_type=corporate, region=EU, product=trade_finance');
+
+
+SELECT user_id, full_name, email, role
+FROM users;
+
+SELECT COUNT(*) AS total_users
+FROM users;
+
+
+INSERT INTO users (full_name, email, password_hash, role, is_active)
+VALUES
+(
+'Demo Analyst',
+'analyst@aml-demo.com',
+'$2b$12$esG7.6wVjGh.X360fl8u0OQ49fJXW7A9KJhhkScMAO24z4LaSTgDa',
+'analyst',
+1
+),
+(
+'Demo Manager',
+'manager@aml-demo.com',
+'$2b$12$l0GmI70tqyr38eLCnL6U7.cU6IA52pDVaEsj7kxLZCxXVREC4a776',
+'manager',
+1
+);
